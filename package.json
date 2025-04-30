@@ -1,13 +1,42 @@
 {
   "name": "count-my-lines",
   "version": "1.0.0",
-  "description": "",
+  "description": "A CLI tool to count lines of code in your project",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "count-my-lines": "./cli.js"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "start": "node cli.js",
+    "dev": "nodemon cli.js",
+    "test": "jest --coverage",
+    "lint": "eslint . --fix",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run lint && npm run test",
+    "precommit": "npm run lint",
+    "coverage": "open coverage/lcov-report/index.html",
+    "local-install": "npm link",
+    "demo": "node cli.js ./ --extensions js,ts --ignore node_modules,dist"
+  },
+  "keywords": [
+    "loc",
+    "lines-of-code",
+    "cli",
+    "productivity"
+  ],
+  "author": "Aromi Benard",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^13.1.0",
+    "globby": "^14.1.0",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3"
+  }
 }
