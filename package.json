@@ -6,17 +6,23 @@
   "bin": {
     "count-my-lines": "./cli.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node cli.js",
     "dev": "nodemon cli.js",
     "test": "jest --coverage",
+    "test:watch": "jest --watch",
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "prepublishOnly": "npm run lint && npm run test",
     "precommit": "npm run lint",
     "coverage": "open coverage/lcov-report/index.html",
     "local-install": "npm link",
-    "demo": "node cli.js ./ --extensions js,ts --ignore node_modules,dist"
+    "demo": "node cli.js ./ --extensions js,ts --ignore node_modules,dist",
+    "security": "npm audit && npm outdated",
+    "size": "bundlesize"
   },
   "keywords": [
     "loc",
@@ -26,7 +32,14 @@
   ],
   "author": "Aromi Benard",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  "jest": {
+    "transform": {
+    "^.+\\.mjs$": "babel-jest",
+    "^.+\\.js$": "babel-jest"
+  },
+  "testEnvironment": "node"
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^13.1.0",
@@ -35,8 +48,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/node": "^22.15.3",
     "eslint": "^9.25.1",
     "globals": "^16.0.0",
+    "jest": "^29.7.0",
+    "p-limit": "^6.2.0",
     "prettier": "^3.5.3"
   }
 }

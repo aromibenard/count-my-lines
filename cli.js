@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 
-const { program } = require('commander');
-const { countLines } = require('./index');
+import { program } from 'commander';
+import { countLines } from './index.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
-const path = require('path');
-const ora = require('ora').default;
-const chalk = require('chalk');
+import path from 'path';
+import ora from 'ora';
+import chalk from 'chalk';
+import os from 'os';
 
 program
     .version(pkg.version)
     .description('📊 A CLI tool to count lines of code')
+    .option('--concurrency <number>', 'set processing concurrency', Number, os.cpus().length)
     .argument('[path]', 'path to analyze (default: current directory)', '.')
     .option('-e, --extensions <extensions>', 'file extensions to include (comma separated)', 'js,jsx,ts,tsx,html,css,scss,json')
     .option('-i, --ignore <patterns>', 'ignore patterns (comma separated)', 'node_modules,.git,dist,build')
@@ -23,6 +27,11 @@ program
         try {
             const result = await countLines(resolvedPath, { extensions, ignore });
             spinner.succeed('Analysis complete!\n');
+            console.log(`${chalk.bold('❌ Error count:')} ${chalk.red(result.errorCount)}`);
+            if (options.verbose) {
+                console.log('\n' + chalk.underline('Matched files:'));
+                files.forEach(file => console.log(`- ${file}`));
+            }
 
             console.log(chalk.yellow('────────────────────────────────────────────'));
             console.log(`${chalk.bold('📂 Path:')} ${chalk.green(resolvedPath)}`);
